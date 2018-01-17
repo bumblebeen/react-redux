@@ -20,19 +20,23 @@ const addLoggingToDispatch = (store) => {
   }
 }
 
+
+const addPromiseToDispatch = (store) => {
+  const rawDispatch = store.dispatch;
+
+  return (action) =>
+    (typeof action.then === 'function') ?
+      action.then(rawDispatch) :
+      rawDispatch(action)
+}
+
 const configureStore = () => {
-  // const persistedState = loadState();
   const store = createStore(reducer);
-  
-  // console.log(store.getState())
+
   if (process.env.NODE_ENV !== 'production')
     store.dispatch = addLoggingToDispatch(store);
   
-  // store.subscribe(throttle(() => {
-  //   saveState({
-  //     todos: store.getState().todos
-  //   });
-  // }), 1000);
+  store.dispatch = addPromiseToDispatch(store)
 
   return store;
 }
