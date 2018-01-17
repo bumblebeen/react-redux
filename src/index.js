@@ -5,7 +5,17 @@ import { Provider } from 'react-redux'
 import App from './components/App'
 import reducer from './reducers'
 
-const store = createStore(reducer)
+const persistedState = {
+  todos: [{
+    id: 0,
+    text: 'Welcome back!',
+    completed: false,
+  }],
+  visibilityFilter: 'SHOW_ACTIVE',
+};
+const store = createStore(reducer, persistedState);
+
+console.log(store.getState())
 
 render(
   <Provider store={store}>
