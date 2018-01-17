@@ -1,19 +1,28 @@
+const todo = (todo, action) => {
+  if (todo === undefined) {
+    return {
+      id: action.id,
+      text: action.text,
+      completed: false
+    }
+  }
+  if (todo.id === action.id) {
+    return {...todo, completed: !todo.completed}
+  }
+
+  return todo;
+}
+
 const todos = (state = [], action) => {
   switch (action.type) {
     case 'ADD_TODO':
       return [
         ...state,
-        {
-          id: action.id,
-          text: action.text,
-          completed: false
-        }
+        todo(undefined, action)
       ]
     case 'TOGGLE_TODO':
-      return state.map(todo =>
-        (todo.id === action.id) 
-          ? {...todo, completed: !todo.completed}
-          : todo
+      return state.map(t =>
+        todo(t, action)
       )
     default:
       return state
